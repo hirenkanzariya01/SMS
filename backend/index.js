@@ -13,13 +13,20 @@ dotenv.config();
 // app.use(bodyParser.json({ limit: '10mb', extended: true }))
 // app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 
+// app.use(cors({
+//   origin: "https://your-frontend-url.vercel.app",
+//   credentials: true
+// }));
 app.use(cors({
-  origin: "https://your-frontend-url.vercel.app",
+  origin: [
+    "http://localhost:5173",
+    "https://sms-py29.vercel.app/"
+  ],
   credentials: true
 }));
 
 app.use(express.json({ limit: '10mb' }))
-app.use(cors())
+// app.use(cors())
 
 mongoose
     .connect(process.env.MONGO_URL, {
@@ -30,9 +37,7 @@ mongoose
     .catch((err) => console.log("NOT CONNECTED TO NETWORK", err))
 
 app.use('/', Routes);
-app.get("/", (req, res) => {
-  res.send("API is running 🚀");
-});
+
 
 app.listen(PORT, () => {
     console.log(`Server started at port no. ${PORT}`)
