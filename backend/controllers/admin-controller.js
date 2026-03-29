@@ -55,30 +55,63 @@ const Complain = require('../models/complainSchema.js');
 //     }
 // };
 
+
+
+
+// const adminRegister = async (req, res) => {
+//     try {
+//         const admin = new Admin({
+//             ...req.body
+//         });
+
+//         const existingAdminByEmail = await Admin.findOne({ email: req.body.email });
+//         const existingSchool = await Admin.findOne({ schoolName: req.body.schoolName });
+
+//         if (existingAdminByEmail) {
+//             res.send({ message: 'Email already exists' });
+//         }
+//         else if (existingSchool) {
+//             res.send({ message: 'School name already exists' });
+//         }
+//         else {
+//             let result = await admin.save();
+//             result.password = undefined;
+//             res.send(result);
+//         }
+//     } catch (err) {
+//         res.status(500).json(err);
+//     }
+// };
+
+
 const adminRegister = async (req, res) => {
     try {
+        console.log("🔥 API HIT");
+        console.log("BODY:", req.body);
+
         const admin = new Admin({
             ...req.body
         });
 
         const existingAdminByEmail = await Admin.findOne({ email: req.body.email });
-        const existingSchool = await Admin.findOne({ schoolName: req.body.schoolName });
 
         if (existingAdminByEmail) {
-            res.send({ message: 'Email already exists' });
+            return res.send({ message: 'Email already exists' });
         }
-        else if (existingSchool) {
-            res.send({ message: 'School name already exists' });
-        }
-        else {
-            let result = await admin.save();
-            result.password = undefined;
-            res.send(result);
-        }
+
+        let result = await admin.save();
+
+        console.log("✅ SAVED:", result);
+
+        result.password = undefined;
+        res.send(result);
+
     } catch (err) {
+        console.log("❌ ERROR:", err);
         res.status(500).json(err);
     }
 };
+
 
 const adminLogIn = async (req, res) => {
     if (req.body.email && req.body.password) {
